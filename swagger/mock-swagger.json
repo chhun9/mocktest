@@ -59,6 +59,7 @@
         ],
         "parameters": [
           {
+            "name": "reqTestModel",
             "in": "body",
             "required": true,
             "schema": {
@@ -80,7 +81,7 @@
             "description": "Invalid Request Parameters or Request Body"
           },
           "500": {
-            "description": "Internal SErver Error"
+            "description": "Internal Server Error"
           }
         }
       }
@@ -94,7 +95,7 @@
     },
     "stringTestModel": {
       "type": "string",
-      "pattern": "^[a-zA-Z0-9]{0,5}$"
+      "pattern": "^[a-zA-Z0-9]{1,8}$"
     },
     "arrayTestModel": {
       "type": "array",
