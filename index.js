@@ -3,7 +3,6 @@ const bodyParser = require('body-parser')
 const kafkaJs = require('kafkajs')
 const express = require('express')
 const spawn = require('child_process')
-const {Partitioners} = require("kafkajs");
 
 const mockServerName = 'MOCK SERVER'
 const mockServerPort = 13001
@@ -33,7 +32,7 @@ mock.on('close', (code) => {
 
 const kafkaSender = async (topicName, messageKey, message) => {
     const kafkaClient = new kafkaJs.Kafka({brokers: [kafkaUrl]})
-    const producer = kafkaClient.producer({createPartitioner: Partitioners.LegacyPartitioner})
+    const producer = kafkaClient.producer({createPartitioner: kafkaJs.Partitioners.LegacyPartitioner})
 
     let payloads = {
         topic: topicName, messages: [{key: messageKey, value: message}]
@@ -80,7 +79,6 @@ const mockProxyServer = (serverName, serverUrl, kafkaPort) => {
         })
         proxyRes.on('end', () => {
             body = Buffer.concat(body).toString()
-            console.log(body, 'asdfasdfasdfasdf')
             let bodyJson = {status: 'success', result: JSON.parse(body)}
 
             if (req?.body?.kafka) {
@@ -97,7 +95,7 @@ const mockProxyServer = (serverName, serverUrl, kafkaPort) => {
     mockServer.use((req, res) => {
         proxyServer.web(req, res, option)
     })
-    console.log(`Listening ${mockServerName} With kafka on port ${proxyMockPort}} Only mock on port ${mockServerPort}`)
+    console.log(`Listening ${mockServerName} With kafka on port ${proxyMockPort} Only mock on port ${mockServerPort}`)
     mockServer.listen(proxyMockPort)
 }
 
