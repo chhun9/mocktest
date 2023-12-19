@@ -4,31 +4,47 @@ const kafkaJs = require('kafkajs')
 const express = require('express')
 const spawn = require('child_process')
 
-const mockServerName = 'MOCK SERVER'
-const mockServerPort = 13001
-const kafkaPort = 23001
-const kafkaUrl = 'localhost:9092'
-const mockServerUrl = `http://localhost:${mockServerPort}`
 const workingDirectory = 'swagger'
+const mockWheelServerName = 'MOCK WHEEL SERVER'
+const mockBodyServerName = 'MOCK BODY SERVER'
+const mockEngineServerName = 'MOCK ENGINE SERVER'
+const kafkaUrl = 'localhost:9092'
+
+const wheelSwagger = './mock-wheel-swagger.json'
+const mockWheelPort = 13001
+const kafkaWheelPort = 23001
+
+const bodySwagger = './mock-body-swagger.json'
+const mockBodyPort = 13002
+const kafkaBodyPort = 23002
+
+const engineSwagger = './mock-engine-swagger.json'
+const mockEnginePort = 13003
+const kafkaEnginePort = 23003
+
+const mockWheelUrl = `http://localhost:${mockWheelPort}`
+const mockBodyUrl = `http://localhost:${mockBodyPort}`
+const mockEngineUrl = `http://localhost:${mockEnginePort}`
 
 const kafkaResponseDelay = 1500
 
-const mock = spawn.spawn('prism mock', ['--host', '0.0.0.0', '-p', '13001', '-d', './mock-swagger.json'], {
-    shell: true, cwd: workingDirectory
-})
-
-mock.stdout.on('data', (data) => {
-    data = data.toString().replace(/\r?\n|\r/g, ' ')
-    console.log(`stdout : ${data}`)
-})
-mock.stderr.on('data', (data) => {
-    data = data.toString().replace(/\r?\n|\r/g, ' ')
-    console.log(`stderr : ${data}`)
-})
-mock.on('close', (code) => {
-    console.log(`child process exited with code : ${code}`)
-    mock.kill(code)
-})
+const startMockServer = (mockPort, swaggerFileName) => {
+    const mock = spawn.spawn('prism mock', ['--host', '0.0.0.0', '-p', mockPort, '-d', swaggerFileName], {
+        shell: true, cwd: workingDirectory
+    })
+    mock.stdout.on('data', (data) => {
+        data = data.toString().replace(/\r?\n|\r/g, ' ')
+        console.log(`stdout : ${data}`)
+    })
+    mock.stderr.on('data', (data) => {
+        data = data.toString().replace(/\r?\n|\r/g, ' ')
+        console.log(`stderr : ${data}`)
+    })
+    mock.on('close', (code) => {
+        console.log(`child process exited with code : ${code}`)
+        mock.kill(code)
+    })
+}
 
 const kafkaSender = async (topicName, messageKey, message) => {
     const kafkaClient = new kafkaJs.Kafka({brokers: [kafkaUrl]})
@@ -52,8 +68,9 @@ const kafkaSender = async (topicName, messageKey, message) => {
         .catch(e => console.error(e))
 }
 
-const mockProxyServer = (serverName, serverUrl, kafkaPort) => {
-    let proxyMockPort = kafkaPort
+const mockProxyServer = (serverName, serverUrl, kafkaPort, mockPort, swaggerFileName) => {
+    startMockServer(mockPort, swaggerFileName)
+
     let option = {
         target: serverUrl,
         selfHandleResponse: true
@@ -95,8 +112,11 @@ const mockProxyServer = (serverName, serverUrl, kafkaPort) => {
     mockServer.use((req, res) => {
         proxyServer.web(req, res, option)
     })
-    console.log(`Listening ${mockServerName} With kafka on port ${proxyMockPort} Only mock on port ${mockServerPort}`)
-    mockServer.listen(proxyMockPort)
+    console.log(`Listening ${serverName} With kafka on port ${kafkaPort} Only mock on port ${mockPort}`)
+    mockServer.listen(kafkaPort)
 }
 
-mockProxyServer(mockServerName, mockServerUrl, kafkaPort)
+
+mockProxyServer(mockWheelServerName, mockWheelUrl, kafkaWheelPort, mockWheelPort, wheelSwagger)
+mockProxyServer(mockBodyServerName, mockBodyUrl, kafkaBodyPort, mockBodyPort, bodySwagger)
+mockProxyServer(mockEngineServerName, mockEngineUrl, kafkaEnginePort, mockEnginePort, engineSwagger)
