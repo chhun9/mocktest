@@ -1,79 +1,25 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "test mock",
+    "description": "test mock - wheel",
     "version": "1.0",
-    "title": "mock server"
+    "title": "mock server - wheel"
   },
   "paths": {
-    "/mock/test1/{pathString}": {
+    "/get-info": {
       "get": {
-        "description": "get test mock",
-        "consumes": [
-          "application/json"
-        ],
+        "description": "get wheel mock",
         "produces": [
           "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "pathString",
-            "in": "path",
-            "required": "true",
-            "$ref": "#/definitions/stringTestModel"
-          },
-          {
-            "name": "queryString",
-            "in": "query",
-            "required": "false",
-            "$ref": "#/definitions/stringTestModel"
-          }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
               "type": "array",
+              "minItems": 30,
               "items": {
-                "$ref": "#/definitions/resTestModel"
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid Request Parameters or Request Body"
-          },
-          "500": {
-            "description": "Internal SErver Error"
-          }
-        }
-      }
-    },
-    "/mock/test2": {
-      "post": {
-        "description": "post mock",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "reqTestModel",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/reqTestModel"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/resTestModel"
+                "$ref": "#/definitions/resWheelGetInfo"
               }
             }
           },
@@ -88,45 +34,44 @@
     }
   },
   "definitions": {
-    "numberTestModel": {
+    "numberModel": {
       "type": "integer",
       "minimum": 1,
-      "maximum": 255
+      "maximum": 5000
     },
-    "stringTestModel": {
+    "stringModel": {
       "type": "string",
-      "pattern": "^[a-zA-Z0-9]{1,8}$"
+      "pattern": "^[a-zA-Z0-9]{5,25}$"
     },
-    "arrayTestModel": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 5,
-      "items": {
-        "$ref": "#/definitions/stringTestModel"
-      }
+    "usageStatus": {
+      "type": "string",
+      "enum": [
+        "USED",
+        "READY",
+        "PENDING",
+        "UNUSABLE"
+      ]
     },
-    "reqTestModel": {
+    "resWheelGetInfo": {
       "type": "object",
       "properties": {
-        "numberTestModel": {
-          "$ref": "#/definitions/numberTestModel"
+        "wheelId": {
+          "$ref": "#/definitions/numberModel"
         },
-        "stringTestModel": {
-          "$ref": "#/definitions/stringTestModel"
-        }
-      }
-    },
-    "resTestModel": {
-      "type": "object",
-      "properties": {
-        "numberTestModel": {
-          "$ref": "#/definitions/numberTestModel"
+        "wheelColor": {
+          "$ref": "#/definitions/stringModel"
         },
-        "stringTestModel": {
-          "$ref": "#/definitions/stringTestModel"
+        "wheelName": {
+          "$ref": "#/definitions/stringModel"
         },
-        "arrayTestModel": {
-          "$ref": "#/definitions/arrayTestModel"
+        "wheelSize": {
+          "$ref": "#/definitions/numberModel"
+        },
+        "wheelVendor": {
+          "$ref": "#/definitions/stringModel"
+        },
+        "wheelStatus": {
+          "$ref": "#/definitions/usageStatus"
         }
       }
     }

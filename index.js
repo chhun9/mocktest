@@ -10,20 +10,20 @@ const mockBodyServerName = 'MOCK BODY SERVER'
 const mockEngineServerName = 'MOCK ENGINE SERVER'
 const kafkaUrl = 'localhost:9092'
 
-const wheelSwagger = './mock-wheel-swagger.json'
-const mockWheelPort = 13001
-const kafkaWheelPort = 23001
-
 const bodySwagger = './mock-body-swagger.json'
-const mockBodyPort = 13002
-const kafkaBodyPort = 23002
+const mockBodyPort = 13001
+const kafkaBodyPort = 23001
 
 const engineSwagger = './mock-engine-swagger.json'
-const mockEnginePort = 13003
-const kafkaEnginePort = 23003
+const mockEnginePort = 13002
+const kafkaEnginePort = 23002
 
-const mockWheelUrl = `http://localhost:${mockWheelPort}`
+const wheelSwagger = './mock-wheel-swagger.json'
+const mockWheelPort = 13003
+const kafkaWheelPort = 23003
+
 const mockBodyUrl = `http://localhost:${mockBodyPort}`
+const mockWheelUrl = `http://localhost:${mockWheelPort}`
 const mockEngineUrl = `http://localhost:${mockEnginePort}`
 
 const kafkaResponseDelay = 1500
@@ -116,7 +116,6 @@ const mockProxyServer = (serverName, serverUrl, kafkaPort, mockPort, swaggerFile
     mockServer.listen(kafkaPort)
 }
 
-
-mockProxyServer(mockWheelServerName, mockWheelUrl, kafkaWheelPort, mockWheelPort, wheelSwagger)
 mockProxyServer(mockBodyServerName, mockBodyUrl, kafkaBodyPort, mockBodyPort, bodySwagger)
 mockProxyServer(mockEngineServerName, mockEngineUrl, kafkaEnginePort, mockEnginePort, engineSwagger)
+mockProxyServer(mockWheelServerName, mockWheelUrl, kafkaWheelPort, mockWheelPort, wheelSwagger)

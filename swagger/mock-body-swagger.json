@@ -1,79 +1,25 @@
 {
   "swagger": "2.0",
   "info": {
-    "description": "test mock",
+    "description": "test mock - body",
     "version": "1.0",
-    "title": "mock server"
+    "title": "mock server - body"
   },
   "paths": {
-    "/mock/test1/{pathString}": {
+    "/get-info": {
       "get": {
-        "description": "get test mock",
-        "consumes": [
-          "application/json"
-        ],
+        "description": "get body mock",
         "produces": [
           "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "pathString",
-            "in": "path",
-            "required": "true",
-            "$ref": "#/definitions/stringTestModel"
-          },
-          {
-            "name": "queryString",
-            "in": "query",
-            "required": "false",
-            "$ref": "#/definitions/stringTestModel"
-          }
         ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
               "type": "array",
+              "minItems": 30,
               "items": {
-                "$ref": "#/definitions/resTestModel"
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid Request Parameters or Request Body"
-          },
-          "500": {
-            "description": "Internal SErver Error"
-          }
-        }
-      }
-    },
-    "/mock/test2": {
-      "post": {
-        "description": "post mock",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "parameters": [
-          {
-            "name": "reqTestModel",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/reqTestModel"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/resTestModel"
+                "$ref": "#/definitions/resBodyGetInfo"
               }
             }
           },
@@ -88,45 +34,55 @@
     }
   },
   "definitions": {
-    "numberTestModel": {
+    "numberModel": {
       "type": "integer",
       "minimum": 1,
-      "maximum": 255
+      "maximum": 5000
     },
-    "stringTestModel": {
+    "stringModel": {
       "type": "string",
-      "pattern": "^[a-zA-Z0-9]{1,8}$"
+      "pattern": "^[a-zA-Z0-9]{5,25}$"
     },
-    "arrayTestModel": {
-      "type": "array",
-      "minItems": 1,
-      "maxItems": 5,
-      "items": {
-        "$ref": "#/definitions/stringTestModel"
-      }
+    "bodyStyle": {
+      "type": "string",
+      "enum": [
+        "SEDAN",
+        "COUPE",
+        "SPORT",
+        "CONVERTIBLE",
+        "SUV",
+        "WAGON"
+      ]
     },
-    "reqTestModel": {
+    "usageStatus": {
+      "type": "string",
+      "enum": [
+        "USED",
+        "READY",
+        "PENDING",
+        "UNUSABLE"
+      ]
+    },
+    "resBodyGetInfo": {
       "type": "object",
       "properties": {
-        "numberTestModel": {
-          "$ref": "#/definitions/numberTestModel"
+        "bodyId": {
+          "$ref": "#/definitions/numberModel"
         },
-        "stringTestModel": {
-          "$ref": "#/definitions/stringTestModel"
-        }
-      }
-    },
-    "resTestModel": {
-      "type": "object",
-      "properties": {
-        "numberTestModel": {
-          "$ref": "#/definitions/numberTestModel"
+        "bodyStyle": {
+          "$ref": "#/definitions/bodyStyle"
         },
-        "stringTestModel": {
-          "$ref": "#/definitions/stringTestModel"
+        "bodyName": {
+          "$ref": "#/definitions/stringModel"
         },
-        "arrayTestModel": {
-          "$ref": "#/definitions/arrayTestModel"
+        "bodyVendor": {
+          "$ref": "#/definitions/stringModel"
+        },
+        "bodyStatus": {
+          "$ref": "#/definitions/usageStatus"
+        },
+        "bodyColor": {
+          "$ref": "#/definitions/stringModel"
         }
       }
     }
