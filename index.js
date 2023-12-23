@@ -29,7 +29,7 @@ const mockEngineUrl = `http://localhost:${mockEnginePort}`
 const kafkaResponseDelay = 1500
 
 const startMockServer = (mockPort, swaggerFileName) => {
-    const mock = spawn.spawn('prism mock', ['--host', '0.0.0.0', '-p', mockPort, '-d', swaggerFileName], {
+    const mock = spawn.spawn('prism mock', ['--host', '0.0.0.0', '-p', mockPort, '-d', swaggerFileName,'-v','debug'], {
         shell: true, cwd: workingDirectory
     })
     mock.stdout.on('data', (data) => {

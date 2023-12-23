@@ -63,22 +63,22 @@
     "resEngineGetInfo": {
       "type": "object",
       "properties": {
-        "EnginId": {
+        "engineId": {
           "$ref": "#/definitions/numberModel"
         },
         "engineFuel": {
           "$ref": "#/definitions/engineFuel"
         },
-        "EnginName": {
+        "engineName": {
           "$ref": "#/definitions/stringModel"
         },
-        "EnginVendor": {
+        "engineVendor": {
           "$ref": "#/definitions/stringModel"
         },
-        "EnginePower": {
+        "enginePower": {
           "$ref": "#/definitions/stringModel"
         },
-        "EnginStatus": {
+        "engineStatus": {
           "$ref": "#/definitions/usageStatus"
         }
       }
